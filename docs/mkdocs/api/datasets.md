@@ -8,19 +8,19 @@ Dataset loading utilities for training and evaluation.
 
 Custom ImageFolder dataset for training compression models.
 
-::: compressai.datasets.ImageFolder
+::: tinify.datasets.ImageFolder
     options:
       show_source: false
 
 ## Video Datasets
 
-::: compressai.datasets.VideoFolder
+::: tinify.datasets.VideoFolder
     options:
       show_source: false
 
 ## Dataset Structure
 
-CompressAI datasets follow this structure:
+Tinify datasets follow this structure:
 
 ```
 dataset/

@@ -46,22 +46,22 @@ Where $\mathcal{D}$ is distortion and $\mathcal{R}$ is estimated bit-rate.
 | <0.5 bpp | 192 | Low bit-rates |
 | >0.5 bpp | 320 | High bit-rates |
 
-See `compressai.zoo.image.cfgs` for detailed configurations.
+See `tinify.zoo.image.cfgs` for detailed configurations.
 
 ## Kodak Dataset Results
 
-![PSNR on Kodak](https://raw.githubusercontent.com/InterDigitalInc/CompressAI/master/assets/kodak-psnr.png)
+![PSNR on Kodak](https://raw.githubusercontent.com/InterDigitalInc/Tinify/master/assets/kodak-psnr.png)
 
 ### PSNR Comparison
 
-CompressAI models compared against traditional codecs (JPEG, BPG, VVC/VTM) on the [Kodak dataset](http://r0k.us/graphics/kodak/).
+Tinify models compared against traditional codecs (JPEG, BPG, VVC/VTM) on the [Kodak dataset](http://r0k.us/graphics/kodak/).
 
 ## Running Benchmarks
 
 ### Evaluate Pre-trained Models
 
 ```bash
-python -m compressai.utils.eval_model pretrained /path/to/kodak/ \
+python -m tinify.utils.eval_model pretrained /path/to/kodak/ \
     -a mbt2018-mean -q 1 2 3 4 5 6 7 8
 ```
 
@@ -69,18 +69,18 @@ python -m compressai.utils.eval_model pretrained /path/to/kodak/ \
 
 ```bash
 # BPG codec
-python -m compressai.utils.bench bpg /path/to/images/
+python -m tinify.utils.bench bpg /path/to/images/
 
 # VTM (VVC reference)
-python -m compressai.utils.bench vtm /path/to/images/
+python -m tinify.utils.bench vtm /path/to/images/
 ```
 
 ### Plot Results
 
 ```bash
-python -m compressai.utils.plot results.json --show
+python -m tinify.utils.plot results.json --show
 ```
 
 ## References
 
-For more comparisons and evaluations, see the [CompressAI paper](https://arxiv.org/abs/2011.03029).
+For more comparisons and evaluations, see the [Tinify paper](https://arxiv.org/abs/2011.03029).

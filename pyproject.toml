@@ -8,15 +8,15 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "compressai"
-version = "1.2.9.dev0"
-description = "A PyTorch library and evaluation platform for end-to-end compression research"
+name = "tinify"
+version = "1.0.0.dev0"
+description = "A PyTorch library and evaluation platform for end-to-end learned compression"
 authors = [
-    { name = "InterDigital AI Lab", email = "compressai@interdigital.com" },
+    { name = "InterDigital AI Lab", email = "tinify@interdigital.com" },
 ]
 readme = "Readme.md"
 requires-python = ">=3.8,<14"
-urls = { Homepage = "https://github.com/InterDigitalInc/CompressAI" }
+urls = { Homepage = "https://github.com/GeorgePearse/tinify" }
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
@@ -128,7 +128,7 @@ tutorials = [
 ]
 
 [project.scripts]
-compressai = "compressai.cli:main"
+tinify = "tinify.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "."}

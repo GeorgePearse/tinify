@@ -1,6 +1,6 @@
 # Training Models
 
-This guide covers how to train compression models using CompressAI.
+This guide covers how to train compression models using Tinify.
 
 ## Using the Example Training Script
 
@@ -15,7 +15,7 @@ Run `train.py --help` to see all available options.
 
 ## Dataset Structure
 
-CompressAI expects a custom `ImageFolder` structure:
+Tinify expects a custom `ImageFolder` structure:
 
 ```
 dataset/
@@ -34,7 +34,7 @@ dataset/
 After training, update the model's internal entropy bottleneck parameters:
 
 ```bash
-python -m compressai.utils.update_model --architecture ARCH checkpoint_best_loss.pth.tar
+python -m tinify.utils.update_model --architecture ARCH checkpoint_best_loss.pth.tar
 ```
 
 This updates the learned cumulative distribution functions (CDFs) required for actual entropy coding.
@@ -51,7 +51,7 @@ torch.save(model.state_dict(), "model_updated.pth.tar")
 Evaluate a trained checkpoint on an image dataset:
 
 ```bash
-python -m compressai.utils.eval_model checkpoint /path/to/images \
+python -m tinify.utils.eval_model checkpoint /path/to/images \
     -a ARCH -p path/to/checkpoint.pth.tar
 ```
 
@@ -59,14 +59,14 @@ Run `--help` for the complete list of options.
 
 ## Entropy Coding
 
-By default, CompressAI uses range Asymmetric Numeral Systems (ANS) for entropy coding.
+By default, Tinify uses range Asymmetric Numeral Systems (ANS) for entropy coding.
 
 ```python
 # List available entropy coders
-print(compressai.available_entropy_coders())
+print(tinify.available_entropy_coders())
 
 # Change the default entropy coder
-compressai.set_entropy_coder("rangecoder")
+tinify.set_entropy_coder("rangecoder")
 ```
 
 ### Compressing to Bitstream
@@ -126,4 +126,4 @@ The number of channels depends on the target bit-rate:
 - **Low bit-rates** (<0.5 bpp): 192 channels for entropy bottleneck
 - **Higher bit-rates**: 320 channels recommended
 
-See `compressai.zoo.image.cfgs` for detailed configurations.
+See `tinify.zoo.image.cfgs` for detailed configurations.

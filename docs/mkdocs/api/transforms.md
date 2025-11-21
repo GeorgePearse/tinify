@@ -6,7 +6,7 @@ Data transformation utilities for preprocessing and augmentation.
 
 Transforms are used to preprocess images for training and inference with compression models.
 
-::: compressai.transforms
+::: tinify.transforms
     options:
       show_root_heading: true
       show_source: false

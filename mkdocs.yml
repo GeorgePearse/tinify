@@ -1,8 +1,8 @@
-site_name: CompressAI
-site_description: A PyTorch library and evaluation platform for end-to-end compression research
-site_url: https://interdigitalinc.github.io/CompressAI/
-repo_url: https://github.com/InterDigitalInc/CompressAI
-repo_name: InterDigitalInc/CompressAI
+site_name: Tinify
+site_description: A PyTorch library and evaluation platform for end-to-end learned compression
+site_url: https://georgepearse.github.io/tinify/
+repo_url: https://github.com/GeorgePearse/tinify
+repo_name: GeorgePearse/tinify
 
 docs_dir: docs/mkdocs
 site_dir: site
@@ -90,9 +90,9 @@ extra_javascript:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/InterDigitalInc/CompressAI
+      link: https://github.com/GeorgePearse/tinify
     - icon: fontawesome/brands/python
-      link: https://pypi.org/project/compressai/
+      link: https://pypi.org/project/tinify/
 
 nav:
   - Home: index.md

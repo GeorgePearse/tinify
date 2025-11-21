@@ -1,8 +1,8 @@
-# CompressAI Training Configuration
+# Tinify Training Configuration
 # Model: Variable Bitrate Joint Autoregressive (Kamisli et al., DCC 2024)
 #
 # Usage:
-#   compressai train image --config configs/mbt2018-vbr.yaml
+#   tinify train image --config configs/mbt2018-vbr.yaml
 #
 # Note: VBR models require two-stage training:
 #   Stage 1: Train with stage=1 (standard training)

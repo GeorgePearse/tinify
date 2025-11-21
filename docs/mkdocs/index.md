@@ -1,27 +1,27 @@
-# CompressAI
+# Tinify
 
 <p align="center">
-  <img src="assets/logo.svg" alt="CompressAI Logo" width="400">
+  <img src="assets/logo.svg" alt="Tinify Logo" width="400">
 </p>
 
 <p align="center">
-  <a href="https://github.com/InterDigitalInc/CompressAI/blob/master/LICENSE"><img src="https://img.shields.io/github/license/InterDigitalInc/CompressAI?color=blue" alt="License"></a>
-  <a href="https://pypi.org/project/compressai/"><img src="https://img.shields.io/pypi/v/compressai?color=brightgreen" alt="PyPI"></a>
-  <a href="https://pypi.org/project/compressai/#files"><img src="https://pepy.tech/badge/compressai" alt="Downloads"></a>
+  <a href="https://github.com/InterDigitalInc/Tinify/blob/master/LICENSE"><img src="https://img.shields.io/github/license/InterDigitalInc/Tinify?color=blue" alt="License"></a>
+  <a href="https://pypi.org/project/tinify/"><img src="https://img.shields.io/pypi/v/tinify?color=brightgreen" alt="PyPI"></a>
+  <a href="https://pypi.org/project/tinify/#files"><img src="https://pepy.tech/badge/tinify" alt="Downloads"></a>
 </p>
 
-**CompressAI** (*compress-ay*) is a PyTorch library and evaluation platform for end-to-end compression research.
+**Tinify** (*compress-ay*) is a PyTorch library and evaluation platform for end-to-end compression research.
 
 ## Features
 
-CompressAI provides:
+Tinify provides:
 
 - **Custom operations, layers and models** for deep learning based data compression
 - **Partial port** of the official [TensorFlow compression](https://github.com/tensorflow/compression) library
 - **Pre-trained models** for learned image compression
 - **Evaluation scripts** to compare learned models against classical image/video compression codecs
 
-![PSNR performances plot on Kodak](https://raw.githubusercontent.com/InterDigitalInc/CompressAI/master/assets/kodak-psnr.png)
+![PSNR performances plot on Kodak](https://raw.githubusercontent.com/InterDigitalInc/Tinify/master/assets/kodak-psnr.png)
 
 !!! note
     Multi-GPU support is currently experimental.
@@ -29,7 +29,7 @@ CompressAI provides:
 ## Quick Installation
 
 ```bash
-pip install compressai
+pip install tinify
 ```
 
 For detailed installation instructions, see the [Installation Guide](getting-started/installation.md).
@@ -56,10 +56,10 @@ See the [Training Tutorial](tutorials/training.md) for more details.
 
 ```bash
 # Evaluate a trained checkpoint
-python -m compressai.utils.eval_model checkpoint /path/to/images/ -a $ARCH -p $CHECKPOINT
+python -m tinify.utils.eval_model checkpoint /path/to/images/ -a $ARCH -p $CHECKPOINT
 
 # Evaluate pre-trained models
-python -m compressai.utils.eval_model pretrained /path/to/images/ -a $ARCH -q $QUALITY
+python -m tinify.utils.eval_model pretrained /path/to/images/ -a $ARCH -q $QUALITY
 ```
 
 ## Available Models
@@ -78,7 +78,7 @@ See the [Model Zoo](model-zoo/index.md) for the complete list of available model
 ## Library Structure
 
 ```
-compressai/
+tinify/
 ├── datasets/        # Data loading utilities
 ├── entropy_models/  # Entropy bottleneck and hyperprior models
 ├── latent_codecs/   # Latent space encoding/decoding
@@ -92,11 +92,11 @@ compressai/
 
 ## Citation
 
-If you use CompressAI in your research, please cite:
+If you use Tinify in your research, please cite:
 
 ```bibtex
-@article{begaint2020compressai,
-    title={CompressAI: a PyTorch library and evaluation platform for end-to-end compression research},
+@article{begaint2020tinify,
+    title={Tinify: a PyTorch library and evaluation platform for end-to-end compression research},
     author={B{\'e}gaint, Jean and Racap{\'e}, Fabien and Feltman, Simon and Pushparaja, Akshay},
     year={2020},
     journal={arXiv preprint arXiv:2011.03029},
@@ -105,8 +105,8 @@ If you use CompressAI in your research, please cite:
 
 ## License
 
-CompressAI is licensed under the BSD 3-Clause Clear License.
+Tinify is licensed under the BSD 3-Clause Clear License.
 
 ## Contributing
 
-We welcome contributions! Please read our [Contributing Guide](https://github.com/InterDigitalInc/CompressAI/blob/master/CONTRIBUTING.md) before submitting pull requests.
+We welcome contributions! Please read our [Contributing Guide](https://github.com/InterDigitalInc/Tinify/blob/master/CONTRIBUTING.md) before submitting pull requests.

@@ -1,8 +1,8 @@
-# CompressAI Training Configuration
+# Tinify Training Configuration
 # Model: Attention-based with GMM (Cheng et al., CVPR 2020)
 #
 # Usage:
-#   compressai train image --config configs/cheng2020-anchor.yaml
+#   tinify train image --config configs/cheng2020-anchor.yaml
 
 domain: image
 

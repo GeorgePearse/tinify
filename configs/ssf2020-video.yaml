@@ -1,8 +1,8 @@
-# CompressAI Training Configuration
+# Tinify Training Configuration
 # Model: Scale-Space Flow for Video (Agustsson et al., CVPR 2020)
 #
 # Usage:
-#   compressai train video --config configs/ssf2020-video.yaml
+#   tinify train video --config configs/ssf2020-video.yaml
 
 domain: video
 

@@ -1,0 +1,4 @@
+include LICENSE
+include requirements.txt
+recursive-include tinify *.cpp *.hpp
+recursive-include third_party *.h

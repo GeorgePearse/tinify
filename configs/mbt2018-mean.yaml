@@ -1,9 +1,9 @@
-# CompressAI Training Configuration
+# Tinify Training Configuration
 # Model: Mean-Scale Hyperprior (Minnen et al., NeurIPS 2018)
 #
 # Usage:
-#   compressai train image --config configs/mbt2018-mean.yaml
-#   compressai train image --config configs/mbt2018-mean.yaml -d /path/to/dataset
+#   tinify train image --config configs/mbt2018-mean.yaml
+#   tinify train image --config configs/mbt2018-mean.yaml -d /path/to/dataset
 
 domain: image
 

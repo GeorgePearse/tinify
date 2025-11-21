@@ -1,6 +1,6 @@
 # Implemented Techniques
 
-A comprehensive overview of all compression techniques implemented in CompressAI.
+A comprehensive overview of all compression techniques implemented in Tinify.
 
 ## Image Compression Models
 
@@ -394,7 +394,7 @@ out_criterion = criterion(out_net, target)
 Default entropy coder - fast and efficient:
 
 ```python
-from compressai.ans import BufferedRansEncoder, RansDecoder
+from tinify.ans import BufferedRansEncoder, RansDecoder
 
 # Encoding
 encoder = BufferedRansEncoder()
@@ -410,13 +410,13 @@ symbols = decoder.decode_stream(indexes, cdf, cdf_lengths, offsets)
 ### Entropy Coder Selection
 
 ```python
-import compressai
+import tinify
 
 # List available coders
-print(compressai.available_entropy_coders())  # ['ans', 'rangecoder']
+print(tinify.available_entropy_coders())  # ['ans', 'rangecoder']
 
 # Set default coder
-compressai.set_entropy_coder('rangecoder')
+tinify.set_entropy_coder('rangecoder')
 ```
 
 ---

@@ -4,32 +4,32 @@ Command-line tools for training, evaluation, and benchmarking.
 
 ## Training
 
-The unified `compressai` CLI provides a standardized interface for training all compression models.
+The unified `tinify` CLI provides a standardized interface for training all compression models.
 
 ### Basic Usage
 
 ```bash
 # Train with config file
-compressai train image --config configs/mbt2018-mean.yaml
+tinify train image --config configs/mbt2018-mean.yaml
 
 # Train with CLI arguments
-compressai train image -m mbt2018-mean -d /path/to/dataset --epochs 100
+tinify train image -m mbt2018-mean -d /path/to/dataset --epochs 100
 
 # Train video model
-compressai train video --config configs/ssf2020-video.yaml
+tinify train video --config configs/ssf2020-video.yaml
 
 # List available models
-compressai train list-models --domain image
+tinify train list-models --domain image
 ```
 
 ### Training Commands
 
 | Command | Description |
 |---------|-------------|
-| `compressai train image` | Train image compression model |
-| `compressai train video` | Train video compression model |
-| `compressai train pointcloud` | Train point cloud compression model |
-| `compressai train list-models` | List available models |
+| `tinify train image` | Train image compression model |
+| `tinify train video` | Train video compression model |
+| `tinify train pointcloud` | Train point cloud compression model |
+| `tinify train list-models` | List available models |
 
 ### Training Arguments
 
@@ -98,7 +98,7 @@ scheduler:
 
 ```bash
 # Train mbt2018-mean on Vimeo90K
-compressai train image \
+tinify train image \
     -m mbt2018-mean \
     -d /data/vimeo90k \
     --epochs 300 \
@@ -107,12 +107,12 @@ compressai train image \
     --cuda
 
 # Resume training from checkpoint
-compressai train image \
+tinify train image \
     --config configs/mbt2018-mean.yaml \
     --checkpoint checkpoints/checkpoint.pth.tar
 
 # Train with MS-SSIM metric
-compressai train image \
+tinify train image \
     -m mbt2018-mean \
     -d /data/vimeo90k \
     --lambda 8.73 \
@@ -126,7 +126,7 @@ compressai train image \
 ### Evaluate Trained Checkpoints
 
 ```bash
-python -m compressai.utils.eval_model checkpoint /path/to/images/ \
+python -m tinify.utils.eval_model checkpoint /path/to/images/ \
     -a ARCHITECTURE \
     -p /path/to/checkpoint.pth.tar
 ```
@@ -134,7 +134,7 @@ python -m compressai.utils.eval_model checkpoint /path/to/images/ \
 ### Evaluate Pre-trained Models
 
 ```bash
-python -m compressai.utils.eval_model pretrained /path/to/images/ \
+python -m tinify.utils.eval_model pretrained /path/to/images/ \
     -a ARCHITECTURE \
     -q QUALITY_LEVELS
 ```
@@ -152,7 +152,7 @@ python -m compressai.utils.eval_model pretrained /path/to/images/ \
 **Example:**
 
 ```bash
-python -m compressai.utils.eval_model pretrained /path/to/kodak/ \
+python -m tinify.utils.eval_model pretrained /path/to/kodak/ \
     -a mbt2018-mean -q 1 2 3 4 5 6 7 8 --cuda
 ```
 
@@ -161,19 +161,19 @@ python -m compressai.utils.eval_model pretrained /path/to/kodak/ \
 ### BPG Codec
 
 ```bash
-python -m compressai.utils.bench bpg /path/to/images/ [OPTIONS]
+python -m tinify.utils.bench bpg /path/to/images/ [OPTIONS]
 ```
 
 ### VTM (VVC Reference)
 
 ```bash
-python -m compressai.utils.bench vtm /path/to/images/ [OPTIONS]
+python -m tinify.utils.bench vtm /path/to/images/ [OPTIONS]
 ```
 
 ### General Options
 
 ```bash
-python -m compressai.utils.bench --help
+python -m tinify.utils.bench --help
 ```
 
 ## Plotting Results
@@ -181,7 +181,7 @@ python -m compressai.utils.bench --help
 Generate rate-distortion plots from evaluation results:
 
 ```bash
-python -m compressai.utils.plot results.json [OPTIONS]
+python -m tinify.utils.plot results.json [OPTIONS]
 ```
 
 **Options:**
@@ -198,11 +198,11 @@ python -m compressai.utils.plot results.json [OPTIONS]
 
 ```bash
 # Trained checkpoint
-python -m compressai.utils.video.eval_model checkpoint /path/to/videos/ \
+python -m tinify.utils.video.eval_model checkpoint /path/to/videos/ \
     -a ssf2020 -p /path/to/checkpoint.pth.tar
 
 # Pre-trained model
-python -m compressai.utils.video.eval_model pretrained /path/to/videos/ \
+python -m tinify.utils.video.eval_model pretrained /path/to/videos/ \
     -a ssf2020 -q QUALITY_LEVELS
 ```
 
@@ -210,16 +210,16 @@ python -m compressai.utils.video.eval_model pretrained /path/to/videos/ \
 
 ```bash
 # x265/HEVC
-python -m compressai.utils.video.bench x265 /path/to/videos/
+python -m tinify.utils.video.bench x265 /path/to/videos/
 
 # VTM (VVC)
-python -m compressai.utils.video.bench VTM /path/to/videos/
+python -m tinify.utils.video.bench VTM /path/to/videos/
 ```
 
 ### Video Plot
 
 ```bash
-python -m compressai.utils.video.plot results.json --show
+python -m tinify.utils.video.plot results.json --show
 ```
 
 ## Model Update
@@ -227,7 +227,7 @@ python -m compressai.utils.video.plot results.json --show
 Update entropy bottleneck parameters after training:
 
 ```bash
-python -m compressai.utils.update_model \
+python -m tinify.utils.update_model \
     --architecture ARCHITECTURE \
     checkpoint.pth.tar
 ```
@@ -246,7 +246,7 @@ This updates the learned CDFs required for entropy coding.
 2. **Update the model:**
 
     ```bash
-    python -m compressai.utils.update_model \
+    python -m tinify.utils.update_model \
         --architecture mbt2018-mean \
         checkpoint_best_loss.pth.tar
     ```
@@ -254,12 +254,12 @@ This updates the learned CDFs required for entropy coding.
 3. **Evaluate:**
 
     ```bash
-    python -m compressai.utils.eval_model checkpoint /path/to/kodak/ \
+    python -m tinify.utils.eval_model checkpoint /path/to/kodak/ \
         -a mbt2018-mean -p checkpoint_best_loss.pth.tar --cuda
     ```
 
 4. **Plot results:**
 
     ```bash
-    python -m compressai.utils.plot results.json --show
+    python -m tinify.utils.plot results.json --show
     ```

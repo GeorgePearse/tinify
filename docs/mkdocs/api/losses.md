@@ -16,6 +16,6 @@ Where:
 
 ## Available Losses
 
-::: compressai.losses.RateDistortionLoss
+::: tinify.losses.RateDistortionLoss
     options:
       show_source: false

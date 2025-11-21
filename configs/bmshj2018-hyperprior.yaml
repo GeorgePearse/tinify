@@ -1,8 +1,8 @@
-# CompressAI Training Configuration
+# Tinify Training Configuration
 # Model: Scale Hyperprior (Ballé et al., ICLR 2018)
 #
 # Usage:
-#   compressai train image --config configs/bmshj2018-hyperprior.yaml
+#   tinify train image --config configs/bmshj2018-hyperprior.yaml
 
 domain: image
 

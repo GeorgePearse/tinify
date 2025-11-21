@@ -44,9 +44,9 @@ These papers established the core architectures and techniques used in modern le
 
 | Library | Description | Links |
 |---------|-------------|-------|
-| **CompressAI** | PyTorch library and evaluation platform for end-to-end compression research (InterDigital) | [GitHub](https://github.com/InterDigitalInc/CompressAI) \| [Docs](https://interdigitalinc.github.io/CompressAI/) |
+| **Tinify** | PyTorch library and evaluation platform for end-to-end compression research (InterDigital) | [GitHub](https://github.com/InterDigitalInc/Tinify) \| [Docs](https://interdigitalinc.github.io/Tinify/) |
 | **tensorflow/compression** | TensorFlow library for learned compression | [GitHub](https://github.com/tensorflow/compression) |
-| **CompressAI-Trainer** | Training platform for end-to-end compression models | [GitHub](https://github.com/InterDigitalInc/CompressAI-Trainer) |
+| **Tinify-Trainer** | Training platform for end-to-end compression models | [GitHub](https://github.com/InterDigitalInc/Tinify-Trainer) |
 
 ## Paper Collections & Resources
 
@@ -75,11 +75,11 @@ These papers established the core architectures and techniques used in modern le
 - [AOM AV1 reference software](https://aomedia.googlesource.com/aom)
 - [Kodak image dataset](http://r0k.us/graphics/kodak/)
 
-## Citing CompressAI
+## Citing Tinify
 
 ```bibtex
-@article{begaint2020compressai,
-    title={CompressAI: a PyTorch library and evaluation platform for end-to-end compression research},
+@article{begaint2020tinify,
+    title={Tinify: a PyTorch library and evaluation platform for end-to-end compression research},
     author={B{\'e}gaint, Jean and Racap{\'e}, Fabien and Feltman, Simon and Pushparaja, Akshay},
     year={2020},
     journal={arXiv preprint arXiv:2011.03029},

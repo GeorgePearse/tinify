@@ -1,13 +1,13 @@
 # Installation
 
-CompressAI supports Python 3.8+ and PyTorch 1.7+.
+Tinify supports Python 3.8+ and PyTorch 1.7+.
 
 ## From PyPI
 
-The simplest way to install CompressAI is via pip:
+The simplest way to install Tinify is via pip:
 
 ```bash
-pip install compressai
+pip install tinify
 ```
 
 !!! note
@@ -28,8 +28,8 @@ For development or to get the latest features, install from source.
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/InterDigitalInc/CompressAI compressai
-    cd compressai
+    git clone https://github.com/InterDigitalInc/Tinify tinify
+    cd tinify
     ```
 
 2. Install in development mode:
@@ -79,7 +79,7 @@ Install additional packages for specific use cases:
 For faster dependency resolution with [uv](https://github.com/astral-sh/uv):
 
 ```bash
-uv pip install compressai
+uv pip install tinify
 ```
 
 Or from source:
@@ -90,17 +90,17 @@ uv pip install -e .
 
 ## Verifying Installation
 
-After installation, verify that CompressAI is working:
+After installation, verify that Tinify is working:
 
 ```python
-import compressai
-print(compressai.__version__)
+import tinify
+print(tinify.__version__)
 
 # List available entropy coders
-print(compressai.available_entropy_coders())
+print(tinify.available_entropy_coders())
 
 # List available models
-from compressai.zoo import models
+from tinify.zoo import models
 print(models.keys())
 ```
 

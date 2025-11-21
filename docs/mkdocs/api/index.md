@@ -1,24 +1,24 @@
 # API Reference
 
-This section documents the CompressAI Python API.
+This section documents the Tinify Python API.
 
 ## Module Overview
 
 | Module | Description |
 |--------|-------------|
-| [`compressai.models`](models.md) | Compression model architectures |
-| [`compressai.entropy_models`](entropy-models.md) | Entropy bottleneck and hyperprior models |
-| [`compressai.latent_codecs`](latent-codecs.md) | Latent space encoding/decoding |
-| [`compressai.layers`](layers.md) | Neural network layers (GDN, attention, etc.) |
-| [`compressai.losses`](losses.md) | Rate-distortion loss functions |
-| [`compressai.datasets`](datasets.md) | Dataset loading utilities |
-| [`compressai.transforms`](transforms.md) | Data transformations |
-| [`compressai.ops`](ops.md) | Custom operations |
+| [`tinify.models`](models.md) | Compression model architectures |
+| [`tinify.entropy_models`](entropy-models.md) | Entropy bottleneck and hyperprior models |
+| [`tinify.latent_codecs`](latent-codecs.md) | Latent space encoding/decoding |
+| [`tinify.layers`](layers.md) | Neural network layers (GDN, attention, etc.) |
+| [`tinify.losses`](losses.md) | Rate-distortion loss functions |
+| [`tinify.datasets`](datasets.md) | Dataset loading utilities |
+| [`tinify.transforms`](transforms.md) | Data transformations |
+| [`tinify.ops`](ops.md) | Custom operations |
 
 ## Top-Level Functions
 
-::: compressai.available_entropy_coders
+::: tinify.available_entropy_coders
 
-::: compressai.get_entropy_coder
+::: tinify.get_entropy_coder
 
-::: compressai.set_entropy_coder
+::: tinify.set_entropy_coder

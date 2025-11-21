@@ -4,14 +4,14 @@ Pre-trained models for end-to-end image and video compression.
 
 ## Overview
 
-CompressAI provides pre-trained models optimized with mean square error (MSE) on RGB channels. Models fine-tuned with other metrics are planned for future releases.
+Tinify provides pre-trained models optimized with mean square error (MSE) on RGB channels. Models fine-tuned with other metrics are planned for future releases.
 
 ## Usage
 
 Load a pre-trained model:
 
 ```python
-from compressai.zoo import mbt2018_mean
+from tinify.zoo import mbt2018_mean
 
 # Load model with quality level 3
 model = mbt2018_mean(quality=3, pretrained=True)
@@ -69,7 +69,7 @@ model.eval()   # Evaluation mode
 The simplest model with a factorized prior. No hyperprior network.
 
 ```python
-from compressai.zoo import bmshj2018_factorized
+from tinify.zoo import bmshj2018_factorized
 model = bmshj2018_factorized(quality=3, pretrained=True)
 ```
 
@@ -78,7 +78,7 @@ model = bmshj2018_factorized(quality=3, pretrained=True)
 Adds a scale hyperprior for better entropy modeling.
 
 ```python
-from compressai.zoo import bmshj2018_hyperprior
+from tinify.zoo import bmshj2018_hyperprior
 model = bmshj2018_hyperprior(quality=3, pretrained=True)
 ```
 
@@ -87,7 +87,7 @@ model = bmshj2018_hyperprior(quality=3, pretrained=True)
 Extends hyperprior with mean prediction for improved compression.
 
 ```python
-from compressai.zoo import mbt2018_mean
+from tinify.zoo import mbt2018_mean
 model = mbt2018_mean(quality=3, pretrained=True)
 ```
 
@@ -96,7 +96,7 @@ model = mbt2018_mean(quality=3, pretrained=True)
 Full autoregressive model with joint priors. Best quality but slower.
 
 ```python
-from compressai.zoo import mbt2018
+from tinify.zoo import mbt2018
 model = mbt2018(quality=3, pretrained=True)
 ```
 
@@ -105,7 +105,7 @@ model = mbt2018(quality=3, pretrained=True)
 Attention-based architecture with Gaussian mixture likelihoods.
 
 ```python
-from compressai.zoo import cheng2020_anchor
+from tinify.zoo import cheng2020_anchor
 model = cheng2020_anchor(quality=3, pretrained=True)
 ```
 
@@ -114,14 +114,14 @@ model = cheng2020_anchor(quality=3, pretrained=True)
 Scale-space flow model for video compression.
 
 ```python
-from compressai.zoo import ssf2020
+from tinify.zoo import ssf2020
 model = ssf2020(quality=3, pretrained=True)
 ```
 
 ## Listing All Models
 
 ```python
-from compressai.zoo import models
+from tinify.zoo import models
 print(list(models.keys()))
 ```
 

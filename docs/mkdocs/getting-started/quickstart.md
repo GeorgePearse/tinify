@@ -1,6 +1,6 @@
 # Quick Start
 
-This guide will help you get started with CompressAI for image compression.
+This guide will help you get started with Tinify for image compression.
 
 ## Basic Usage
 
@@ -8,7 +8,7 @@ This guide will help you get started with CompressAI for image compression.
 
 ```python
 import torch
-from compressai.zoo import mbt2018_mean
+from tinify.zoo import mbt2018_mean
 
 # Load a pre-trained model (quality level 3)
 model = mbt2018_mean(quality=3, pretrained=True)
@@ -54,7 +54,7 @@ reconstructed_img.save("reconstructed.png")
 
 ## Using the Codec CLI
 
-CompressAI provides a command-line interface for encoding/decoding:
+Tinify provides a command-line interface for encoding/decoding:
 
 ```bash
 # Encode an image

@@ -10,7 +10,7 @@ Entropy models are a critical component of learned compression. They model the p
 
 The entropy bottleneck is used to compress the latent representation of an image. It learns a flexible density model of the latent distribution.
 
-::: compressai.entropy_models.EntropyBottleneck
+::: tinify.entropy_models.EntropyBottleneck
     options:
       members:
         - forward
@@ -21,7 +21,7 @@ The entropy bottleneck is used to compress the latent representation of an image
 
 ## Gaussian Conditional
 
-::: compressai.entropy_models.GaussianConditional
+::: tinify.entropy_models.GaussianConditional
     options:
       members:
         - forward
@@ -30,6 +30,6 @@ The entropy bottleneck is used to compress the latent representation of an image
 
 ## Entropy Model Base
 
-::: compressai.entropy_models.EntropyModel
+::: tinify.entropy_models.EntropyModel
     options:
       show_source: false

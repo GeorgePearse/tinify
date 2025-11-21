@@ -1,21 +1,21 @@
 # Custom Models
 
-This tutorial shows how to implement a custom autoencoder architecture using CompressAI modules.
+This tutorial shows how to implement a custom autoencoder architecture using Tinify modules.
 
 ## Basic Architecture
 
 Let's build a simple autoencoder with:
 
-- An [`EntropyBottleneck`][compressai.entropy_models.EntropyBottleneck] module
+- An [`EntropyBottleneck`][tinify.entropy_models.EntropyBottleneck] module
 - 3 convolutional layers for encoding
 - 3 transposed convolutions for decoding
-- [`GDN`][compressai.layers.GDN] activation functions
+- [`GDN`][tinify.layers.GDN] activation functions
 
 ```python
 import torch.nn as nn
 
-from compressai.entropy_models import EntropyBottleneck
-from compressai.layers import GDN
+from tinify.entropy_models import EntropyBottleneck
+from tinify.layers import GDN
 
 
 class Network(nn.Module):
@@ -94,11 +94,11 @@ This auxiliary loss must be minimized during or after training.
 
 ## Using CompressionModel Base Class
 
-CompressAI provides a [`CompressionModel`][compressai.models.CompressionModel] base class with helpful utilities:
+Tinify provides a [`CompressionModel`][tinify.models.CompressionModel] base class with helpful utilities:
 
 ```python
-from compressai.models import CompressionModel
-from compressai.models.utils import conv, deconv
+from tinify.models import CompressionModel
+from tinify.models.utils import conv, deconv
 
 
 class Network(CompressionModel):
@@ -188,13 +188,13 @@ for i in range(num_epochs):
 For better compression, add a hyperprior network:
 
 ```python
-from compressai.models import ScaleHyperprior
+from tinify.models import ScaleHyperprior
 
 # Use the built-in scale hyperprior model
 model = ScaleHyperprior(N=128, M=192)
 ```
 
-Or implement your own by following the patterns in `compressai.models.google`.
+Or implement your own by following the patterns in `tinify.models.google`.
 
 ## Next Steps
 

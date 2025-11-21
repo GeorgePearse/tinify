@@ -1,0 +1,4 @@
+tinify
+==========
+.. automodule:: tinify
+   :members:

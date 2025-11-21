@@ -4,9 +4,9 @@ PYTORCH_DOCKER_IMAGE = pytorch/pytorch:1.8.1-cuda11.1-cudnn8
 PYTHON_DOCKER_IMAGE = python:3.8-buster
 
 GIT_DESCRIBE = $(shell git describe --first-parent)
-ARCHIVE = compressai.tar.gz
+ARCHIVE = tinify.tar.gz
 
-src_dirs := compressai tests examples docs
+src_dirs := tinify tests examples docs
 
 .PHONY: help
 help: ## Show this message
@@ -51,7 +51,7 @@ style: ## Apply style formating
 
 tests:  ## Run tests
 	@echo "--> Running Python tests"
-	@pytest -x -m "not slow" --cov compressai --cov-append --cov-report= ./tests/
+	@pytest -x -m "not slow" --cov tinify --cov-append --cov-report= ./tests/
 
 coverage: ## Run coverage
 	@echo "--> Running Python coverage"
@@ -86,7 +86,7 @@ docker: ## Build docker image
 		--build-arg PYTORCH_IMAGE=${PYTORCH_DOCKER_IMAGE} \
 		--build-arg WITH_JUPYTER=0 \
 		--progress=auto \
-		-t compressai:${GIT_DESCRIBE} .
+		-t tinify:${GIT_DESCRIBE} .
 	@rm docker/${ARCHIVE}
 
 docker-cpu: ## Build docker image (cpu only)
@@ -97,5 +97,5 @@ docker-cpu: ## Build docker image (cpu only)
 		--build-arg BASE_IMAGE=${PYTHON_DOCKER_IMAGE} \
 		--build-arg WITH_JUPYTER=0 \
 		--progress=auto \
-		-t compressai:${GIT_DESCRIBE}-cpu .
+		-t tinify:${GIT_DESCRIBE}-cpu .
 	@rm docker/${ARCHIVE}

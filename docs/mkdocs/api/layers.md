@@ -6,33 +6,33 @@ Neural network layers for compression models.
 
 The GDN layer is commonly used in learned image compression for its effectiveness at decorrelating features.
 
-::: compressai.layers.GDN
+::: tinify.layers.GDN
     options:
       members:
         - forward
 
 ## Attention Modules
 
-::: compressai.layers.AttentionBlock
+::: tinify.layers.AttentionBlock
     options:
       show_source: false
 
 ## Convolutional Layers
 
-::: compressai.layers.conv3x3
+::: tinify.layers.conv3x3
 
-::: compressai.layers.subpel_conv3x3
+::: tinify.layers.subpel_conv3x3
 
 ## Residual Blocks
 
-::: compressai.layers.ResidualBlock
+::: tinify.layers.ResidualBlock
     options:
       show_source: false
 
-::: compressai.layers.ResidualBlockUpsample
+::: tinify.layers.ResidualBlockUpsample
     options:
       show_source: false
 
-::: compressai.layers.ResidualBlockWithStride
+::: tinify.layers.ResidualBlockWithStride
     options:
       show_source: false
