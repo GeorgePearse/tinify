@@ -73,11 +73,14 @@ pub fn rans64_enc_put_bits(
 }
 
 /// Flush the rANS encoder - writes final state to output
+/// Note: In C++, this writes [low, high] which after reversal becomes [high, low]
+/// So we push [high, low] here so after reversing we get [low, high] at the start
 #[inline]
 pub fn rans64_enc_flush(state: Rans64State, output: &mut Vec<u32>) {
     let x = state;
-    output.push((x >> 0) as u32);
-    output.push((x >> 32) as u32);
+    // Push in reverse order so after output.reverse() they end up as [low, high]
+    output.push((x >> 32) as u32);  // high first
+    output.push((x >> 0) as u32);   // low second
 }
 
 /// Initialize a rANS decoder from encoded data

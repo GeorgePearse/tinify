@@ -135,7 +135,7 @@ impl BufferedRansEncoder {
     }
 
     /// Flush buffered symbols and return encoded bytes
-    pub fn flush<'py>(&mut self, py: Python<'py>) -> Bound<'py, PyBytes> {
+    pub fn flush<'py>(&mut self, py: Python<'py>) -> PyResult<Py<PyBytes>> {
         let mut state = rans64_enc_init();
         let mut output: Vec<u32> = Vec::with_capacity(self.syms.len());
 
@@ -163,7 +163,7 @@ impl BufferedRansEncoder {
             .flat_map(|&x| x.to_le_bytes())
             .collect();
 
-        PyBytes::new(py, &bytes)
+        Ok(PyBytes::new_bound(py, &bytes).into())
     }
 }
 
@@ -194,7 +194,7 @@ impl RansEncoder {
         cdfs: Vec<Vec<i32>>,
         cdfs_sizes: Vec<i32>,
         offsets: Vec<i32>,
-    ) -> Bound<'py, PyBytes> {
+    ) -> PyResult<Py<PyBytes>> {
         let mut encoder = BufferedRansEncoder::new();
         encoder.encode_with_indexes(symbols, indexes, cdfs, cdfs_sizes, offsets);
         encoder.flush(py)

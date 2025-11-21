@@ -54,16 +54,15 @@ pub fn pmf_to_quantized_cdf(pmf: Vec<f32>, precision: i32) -> PyResult<Vec<u32>>
         *c = ((target * (*c as u64)) / total) as u32;
     }
 
-    // Convert to cumulative sum
+    // Convert to cumulative sum (partial_sum)
     let mut cumsum = 0u32;
     for c in cdf.iter_mut() {
-        let freq = *c;
+        cumsum = cumsum.wrapping_add(*c);
         *c = cumsum;
-        cumsum = cumsum.wrapping_add(freq);
     }
 
     // Ensure last element is exactly 1 << precision
-    *cdf.last_mut().unwrap() = (1u32 << precision);
+    *cdf.last_mut().unwrap() = 1u32 << precision;
 
     // Fix zero-frequency symbols by stealing from low-frequency symbols
     for i in 0..cdf.len() - 1 {

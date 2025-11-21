@@ -11,5 +11,4 @@ license = {text = "BSD-3-Clause"}
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
-python-source = "python"
 module-name = "tinify_exts"
