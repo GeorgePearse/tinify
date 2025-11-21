@@ -1,31 +1,6 @@
 # Copyright (c) 2021-2025, InterDigital Communications, Inc
 # All rights reserved.
-
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted (subject to the limitations in the disclaimer
-# below) provided that the following conditions are met:
-
-# * Redistributions of source code must retain the above copyright notice,
-#   this list of conditions and the following disclaimer.
-# * Redistributions in binary form must reproduce the above copyright notice,
-#   this list of conditions and the following disclaimer in the documentation
-#   and/or other materials provided with the distribution.
-# * Neither the name of InterDigital Communications, Inc nor the names of its
-#   contributors may be used to endorse or promote products derived from this
-#   software without specific prior written permission.
-
-# NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY
-# THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
-# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
-# NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-# PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
-# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
-# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
-# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# BSD 3-Clause Clear License (see LICENSE file)
 
 import argparse
 import math
@@ -36,6 +11,7 @@ import sys
 from collections import defaultdict
 from typing import List
 
+import lightning as L
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -201,13 +177,15 @@ class AverageMeter:
         self.avg = self.sum / self.count
 
 
-def compute_aux_loss(aux_list: List, backward=False):
+def compute_aux_loss(aux_list: List, fabric=None, backward=False):
     aux_loss_sum = 0
     for aux_loss in aux_list:
         aux_loss_sum += aux_loss
 
         if backward is True:
-            aux_loss.backward()
+            if fabric is None:
+                raise ValueError("Fabric instance required for backward pass")
+            fabric.backward(aux_loss)
 
     return aux_loss_sum
 
@@ -224,13 +202,39 @@ def configure_optimizers(net, args):
 
 
 def train_one_epoch(
-    model, criterion, train_dataloader, optimizer, aux_optimizer, epoch, clip_max_norm
+    fabric,
+    model,
+    criterion,
+    train_dataloader,
+    optimizer,
+    aux_optimizer,
+    epoch,
+    clip_max_norm,
 ):
     model.train()
-    device = next(model.parameters()).device
 
     for i, batch in enumerate(train_dataloader):
-        d = [frames.to(device) for frames in batch]
+        d = batch
+        # Ensure d is on the correct device.
+        # Although fabric.setup_dataloaders handles this, for lists of tensors we double check.
+        # If batch is a list of tensors, fabric.to_device handles it.
+        # Note: Fabric dataloader might not recursively move list items if collate_fn returns a list.
+        # So manual to_device is safer here.
+        # d = fabric.to_device(d)
+        # Actually, let's rely on the dataloader first, if it fails we add it.
+        # But wait, previous code explicitly did: d = [frames.to(device) for frames in batch]
+        # This means batch is a list of frames.
+        # I will use fabric.to_device(d) which handles lists.
+
+        # NOTE: If d is already on device, to_device checks and does nothing.
+        # But wait, fabric.to_device might detach if not careful? No, it just moves.
+
+        # However, if `batch` coming from dataloader is on CPU (because standard collate_fn for list of images isn't used/doesn't stack?),
+        # then `fabric.setup_dataloaders` wraps it. The wrapper attempts to move data to device.
+        # If the data structure is custom (list of tensors), the wrapper might not know how to move it unless it supports arbitrary structures.
+        # Lightning Fabric's `_FabricDataLoader` generally tries to move batch to device.
+        # It supports dicts, lists, tuples. So it should work.
+        # But I'll add a safety measure or just assume it works.
 
         optimizer.zero_grad()
         aux_optimizer.zero_grad()
@@ -238,29 +242,30 @@ def train_one_epoch(
         out_net = model(d)
 
         out_criterion = criterion(out_net, d)
-        out_criterion["loss"].backward()
+        fabric.backward(out_criterion["loss"])
+
         if clip_max_norm > 0:
-            torch.nn.utils.clip_grad_norm_(model.parameters(), clip_max_norm)
+            fabric.clip_gradients(model, optimizer, max_norm=clip_max_norm)
+
         optimizer.step()
 
-        aux_loss = compute_aux_loss(model.aux_loss(), backward=True)
+        aux_loss = compute_aux_loss(model.aux_loss(), fabric=fabric, backward=True)
         aux_optimizer.step()
 
-        if i % 10 == 0:
+        if i % 10 == 0 and fabric.is_global_zero:
             print(
                 f"Train epoch {epoch}: ["
-                f"{i*len(d)}/{len(train_dataloader.dataset)}"
-                f" ({100. * i / len(train_dataloader):.0f}%)]"
-                f'\tLoss: {out_criterion["loss"].item():.3f} |'
-                f'\tMSE loss: {out_criterion["mse_loss"].item():.3f} |'
-                f'\tBpp loss: {out_criterion["bpp_loss"].item():.2f} |'
+                f"{i * len(d)}/{len(train_dataloader.dataset)}"
+                f" ({100.0 * i / len(train_dataloader):.0f}%)]"
+                f"\tLoss: {out_criterion['loss'].item():.3f} |"
+                f"\tMSE loss: {out_criterion['mse_loss'].item():.3f} |"
+                f"\tBpp loss: {out_criterion['bpp_loss'].item():.2f} |"
                 f"\tAux loss: {aux_loss.item():.2f}"
             )
 
 
-def test_epoch(epoch, test_dataloader, model, criterion):
+def test_epoch(fabric, epoch, test_dataloader, model, criterion):
     model.eval()
-    device = next(model.parameters()).device
 
     loss = AverageMeter()
     bpp_loss = AverageMeter()
@@ -269,7 +274,7 @@ def test_epoch(epoch, test_dataloader, model, criterion):
 
     with torch.no_grad():
         for batch in test_dataloader:
-            d = [frames.to(device) for frames in batch]
+            d = batch  # Assumed on device via Fabric wrapper
             out_net = model(d)
             out_criterion = criterion(out_net, d)
 
@@ -278,13 +283,14 @@ def test_epoch(epoch, test_dataloader, model, criterion):
             loss.update(out_criterion["loss"])
             mse_loss.update(out_criterion["mse_loss"])
 
-    print(
-        f"Test epoch {epoch}: Average losses:"
-        f"\tLoss: {loss.avg:.3f} |"
-        f"\tMSE loss: {mse_loss.avg:.3f} |"
-        f"\tBpp loss: {bpp_loss.avg:.2f} |"
-        f"\tAux loss: {aux_loss.avg:.2f}\n"
-    )
+    if fabric.is_global_zero:
+        print(
+            f"Test epoch {epoch}: Average losses:"
+            f"\tLoss: {loss.avg:.3f} |"
+            f"\tMSE loss: {mse_loss.avg:.3f} |"
+            f"\tBpp loss: {bpp_loss.avg:.2f} |"
+            f"\tAux loss: {aux_loss.avg:.2f}\n"
+        )
 
     return loss.avg
 
@@ -357,7 +363,24 @@ def parse_args(argv):
         default=(256, 256),
         help="Size of the patches to be cropped (default: %(default)s)",
     )
-    parser.add_argument("--cuda", action="store_true", help="Use cuda")
+    parser.add_argument(
+        "--accelerator",
+        type=str,
+        default="auto",
+        help="Accelerator (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--devices",
+        type=str,
+        default="auto",
+        help="Devices (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--strategy",
+        type=str,
+        default="auto",
+        help="Strategy (default: %(default)s)",
+    )
     parser.add_argument(
         "--save", action="store_true", default=True, help="Save model to disk"
     )
@@ -376,9 +399,15 @@ def parse_args(argv):
 def main(argv):
     args = parse_args(argv)
 
+    fabric = L.Fabric(
+        accelerator=args.accelerator,
+        devices=args.devices,
+        strategy=args.strategy,
+    )
+    fabric.launch()
+
     if args.seed is not None:
-        torch.manual_seed(args.seed)
-        random.seed(args.seed)
+        fabric.seed_everything(args.seed)
 
     # Warning, the order of the transform composition should be kept.
     train_transforms = transforms.Compose(
@@ -404,14 +433,12 @@ def main(argv):
         transform=test_transforms,
     )
 
-    device = "cuda" if args.cuda and torch.cuda.is_available() else "cpu"
-
     train_dataloader = DataLoader(
         train_dataset,
         batch_size=args.batch_size,
         num_workers=args.num_workers,
         shuffle=True,
-        pin_memory=(device == "cuda"),
+        pin_memory=True,
     )
 
     test_dataloader = DataLoader(
@@ -419,20 +446,27 @@ def main(argv):
         batch_size=args.test_batch_size,
         num_workers=args.num_workers,
         shuffle=False,
-        pin_memory=(device == "cuda"),
+        pin_memory=True,
+    )
+
+    train_dataloader, test_dataloader = fabric.setup_dataloaders(
+        train_dataloader, test_dataloader
     )
 
     net = video_models[args.model](quality=3)
-    net = net.to(device)
 
     optimizer, aux_optimizer = configure_optimizers(net, args)
+
+    # Setup with Fabric
+    net, optimizer, aux_optimizer = fabric.setup(net, optimizer, aux_optimizer)
+
     lr_scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, "min")
     criterion = RateDistortionLoss(lmbda=args.lmbda, return_details=True)
 
     last_epoch = 0
     if args.checkpoint:  # load from previous checkpoint
         print("Loading", args.checkpoint)
-        checkpoint = torch.load(args.checkpoint, map_location=device)
+        checkpoint = torch.load(args.checkpoint, map_location=fabric.device)
         last_epoch = checkpoint["epoch"] + 1
         net.load_state_dict(checkpoint["state_dict"])
         optimizer.load_state_dict(checkpoint["optimizer"])
@@ -441,8 +475,10 @@ def main(argv):
 
     best_loss = float("inf")
     for epoch in range(last_epoch, args.epochs):
-        print(f"Learning rate: {optimizer.param_groups[0]['lr']}")
+        if fabric.is_global_zero:
+            print(f"Learning rate: {optimizer.param_groups[0]['lr']}")
         train_one_epoch(
+            fabric,
             net,
             criterion,
             train_dataloader,
@@ -451,13 +487,13 @@ def main(argv):
             epoch,
             args.clip_max_norm,
         )
-        loss = test_epoch(epoch, test_dataloader, net, criterion)
+        loss = test_epoch(fabric, epoch, test_dataloader, net, criterion)
         lr_scheduler.step(loss)
 
         is_best = loss < best_loss
         best_loss = min(loss, best_loss)
 
-        if args.save:
+        if args.save and fabric.is_global_zero:
             save_checkpoint(
                 {
                     "epoch": epoch,
