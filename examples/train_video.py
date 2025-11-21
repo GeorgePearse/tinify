@@ -245,7 +245,9 @@ def train_one_epoch(
         fabric.backward(out_criterion["loss"])
 
         if clip_max_norm > 0:
-            fabric.clip_gradients(model, optimizer, max_norm=clip_max_norm)
+            fabric.clip_gradients(
+                model, optimizer, max_norm=clip_max_norm, error_if_nonfinite=False
+            )
 
         optimizer.step()
 

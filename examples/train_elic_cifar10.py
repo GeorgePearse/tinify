@@ -61,7 +61,9 @@ def train_one_epoch(
         fabric.backward(out_criterion["loss"])
 
         if clip_max_norm > 0:
-            fabric.clip_gradients(model, optimizer, max_norm=clip_max_norm)
+            fabric.clip_gradients(
+                model, optimizer, max_norm=clip_max_norm, error_if_nonfinite=False
+            )
 
         optimizer.step()
 
@@ -154,6 +156,12 @@ def parse_args(argv):
         default="auto",
         help="Strategy (default: %(default)s)",
     )
+    parser.add_argument(
+        "--precision",
+        type=str,
+        default="32-true",
+        help="Precision (default: %(default)s)",
+    )
     return parser.parse_args(argv)
 
 
@@ -164,6 +172,7 @@ def main(argv):
         accelerator=args.accelerator,
         devices=args.devices,
         strategy=args.strategy,
+        precision=args.precision,
     )
     fabric.launch()
     fabric.seed_everything(args.seed)

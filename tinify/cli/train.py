@@ -182,7 +182,10 @@ def train_one_epoch(
 
         if config.training.clip_max_norm > 0:
             fabric.clip_gradients(
-                model, optimizer, max_norm=config.training.clip_max_norm
+                model,
+                optimizer,
+                max_norm=config.training.clip_max_norm,
+                error_if_nonfinite=False,
             )
 
         optimizer.step()
