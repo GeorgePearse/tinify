@@ -1,0 +1,11 @@
+# Rust build artifacts
+/target/
+Cargo.lock
+
+# Python build artifacts
+*.so
+*.pyd
+__pycache__/
+*.egg-info/
+dist/
+build/
