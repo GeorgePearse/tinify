@@ -1,0 +1,48 @@
+# CompressAI Training Configuration
+# Model: Mean-Scale Hyperprior (Minnen et al., NeurIPS 2018)
+#
+# Usage:
+#   compressai train image --config configs/mbt2018-mean.yaml
+#   compressai train image --config configs/mbt2018-mean.yaml -d /path/to/dataset
+
+domain: image
+
+model:
+  name: mbt2018-mean
+  quality: 3  # Quality levels 1-8
+  pretrained: false
+
+dataset:
+  path: /path/to/vimeo90k  # Override with -d flag
+  split_train: train
+  split_test: test
+  patch_size: [256, 256]
+  num_workers: 4
+
+training:
+  epochs: 300
+  batch_size: 16
+  test_batch_size: 64
+  lmbda: 0.0067  # Lambda for quality 3 (MSE)
+  metric: mse  # mse or ms-ssim
+  clip_max_norm: 1.0
+  seed: 42
+  cuda: true
+  save: true
+  save_dir: ./checkpoints/mbt2018-mean-q3
+  log_interval: 10
+
+optimizer:
+  net:
+    type: Adam
+    lr: 0.0001
+  aux:
+    type: Adam
+    lr: 0.001
+
+scheduler:
+  type: ReduceLROnPlateau
+  mode: min
+  factor: 0.5
+  patience: 20
+  min_lr: 0.0000001

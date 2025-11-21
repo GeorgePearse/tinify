@@ -32,6 +32,7 @@ dependencies = [
   "einops",
   "matplotlib",
   "numpy >= 1.24.4",
+  "pyyaml>=6.0",
   "Pandas >= 2.0.3; python_version < '3.9'",
   "Pandas >= 2.3.2; python_version >= '3.9'",
   "pybind11>=2.6.0; python_version < '3.10'", # For --no-build-isolation.
@@ -125,6 +126,9 @@ tutorials = [
   "ipywidgets",
   "jupyter",
 ]
+
+[project.scripts]
+compressai = "compressai.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "."}

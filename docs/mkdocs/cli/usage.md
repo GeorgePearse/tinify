@@ -1,6 +1,125 @@
 # CLI Reference
 
-Command-line tools for model evaluation and benchmarking.
+Command-line tools for training, evaluation, and benchmarking.
+
+## Training
+
+The unified `compressai` CLI provides a standardized interface for training all compression models.
+
+### Basic Usage
+
+```bash
+# Train with config file
+compressai train image --config configs/mbt2018-mean.yaml
+
+# Train with CLI arguments
+compressai train image -m mbt2018-mean -d /path/to/dataset --epochs 100
+
+# Train video model
+compressai train video --config configs/ssf2020-video.yaml
+
+# List available models
+compressai train list-models --domain image
+```
+
+### Training Commands
+
+| Command | Description |
+|---------|-------------|
+| `compressai train image` | Train image compression model |
+| `compressai train video` | Train video compression model |
+| `compressai train pointcloud` | Train point cloud compression model |
+| `compressai train list-models` | List available models |
+
+### Training Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `-c, --config` | Path to config file (YAML/JSON/TOML) |
+| `-m, --model` | Model architecture name |
+| `-q, --quality` | Quality level (1-8) |
+| `-d, --dataset` | Path to training dataset |
+| `-e, --epochs` | Number of training epochs |
+| `--batch-size` | Training batch size |
+| `--lambda` | Rate-distortion trade-off parameter |
+| `-lr, --learning-rate` | Learning rate |
+| `--cuda` / `--no-cuda` | Enable/disable CUDA |
+| `--checkpoint` | Resume from checkpoint |
+| `--save-dir` | Directory to save checkpoints |
+| `--seed` | Random seed |
+
+### Config File Format
+
+```yaml
+# configs/mbt2018-mean.yaml
+domain: image
+
+model:
+  name: mbt2018-mean
+  quality: 3
+
+dataset:
+  path: /path/to/vimeo90k
+  patch_size: [256, 256]
+  num_workers: 4
+
+training:
+  epochs: 300
+  batch_size: 16
+  lmbda: 0.0067
+  metric: mse  # or ms-ssim
+  cuda: true
+  save_dir: ./checkpoints
+
+optimizer:
+  net: {type: Adam, lr: 0.0001}
+  aux: {type: Adam, lr: 0.001}
+
+scheduler:
+  type: ReduceLROnPlateau
+  patience: 20
+```
+
+### Available Models
+
+**Image Compression:**
+- `bmshj2018-factorized` - Factorized prior (Ballé 2018)
+- `bmshj2018-hyperprior` - Scale hyperprior (Ballé 2018)
+- `mbt2018-mean` - Mean-scale hyperprior (Minnen 2018)
+- `mbt2018` - Joint autoregressive (Minnen 2018)
+- `cheng2020-anchor` - Attention-based (Cheng 2020)
+- `cheng2020-attn` - Attention with GMM (Cheng 2020)
+- `*-vbr` - Variable bitrate variants
+
+**Video Compression:**
+- `ssf2020` - Scale-space flow (Agustsson 2020)
+
+### Training Examples
+
+```bash
+# Train mbt2018-mean on Vimeo90K
+compressai train image \
+    -m mbt2018-mean \
+    -d /data/vimeo90k \
+    --epochs 300 \
+    --batch-size 16 \
+    --lambda 0.0067 \
+    --cuda
+
+# Resume training from checkpoint
+compressai train image \
+    --config configs/mbt2018-mean.yaml \
+    --checkpoint checkpoints/checkpoint.pth.tar
+
+# Train with MS-SSIM metric
+compressai train image \
+    -m mbt2018-mean \
+    -d /data/vimeo90k \
+    --lambda 8.73 \
+    --config configs/mbt2018-mean.yaml
+```
+
+---
 
 ## Model Evaluation
 

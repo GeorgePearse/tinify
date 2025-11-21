@@ -1,0 +1,48 @@
+# CompressAI Training Configuration
+# Model: Variable Bitrate Joint Autoregressive (Kamisli et al., DCC 2024)
+#
+# Usage:
+#   compressai train image --config configs/mbt2018-vbr.yaml
+#
+# Note: VBR models require two-stage training:
+#   Stage 1: Train with stage=1 (standard training)
+#   Stage 2: Fine-tune with stage=2 (VBR modules active)
+
+domain: image
+
+model:
+  name: mbt2018-vbr
+  quality: 3
+  pretrained: false
+
+dataset:
+  path: /path/to/dataset
+  split_train: train
+  split_test: test
+  patch_size: [256, 256]
+  num_workers: 4
+
+training:
+  epochs: 300
+  batch_size: 16
+  test_batch_size: 64
+  lmbda: 0.0067
+  metric: mse
+  clip_max_norm: 1.0
+  cuda: true
+  save: true
+  save_dir: ./checkpoints/mbt2018-vbr
+
+optimizer:
+  net:
+    type: Adam
+    lr: 0.0001
+  aux:
+    type: Adam
+    lr: 0.001
+
+scheduler:
+  type: ReduceLROnPlateau
+  mode: min
+  factor: 0.5
+  patience: 20
