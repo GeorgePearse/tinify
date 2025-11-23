@@ -11,6 +11,7 @@ This section documents the Tinify Python API.
 | [`tinify.latent_codecs`](latent-codecs.md) | Latent space encoding/decoding |
 | [`tinify.layers`](layers.md) | Neural network layers (GDN, attention, etc.) |
 | [`tinify.losses`](losses.md) | Rate-distortion loss functions |
+| [Metrics](metrics.md) | Quality and performance metrics |
 | [`tinify.datasets`](datasets.md) | Dataset loading utilities |
 | [`tinify.transforms`](transforms.md) | Data transformations |
 | [`tinify.ops`](ops.md) | Custom operations |

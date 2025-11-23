@@ -110,6 +110,7 @@ nav:
     - Latent Codecs: api/latent-codecs.md
     - Layers: api/layers.md
     - Losses: api/losses.md
+    - Metrics: api/metrics.md
     - Datasets: api/datasets.md
     - Transforms: api/transforms.md
     - Operations: api/ops.md
