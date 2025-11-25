@@ -18,6 +18,29 @@ CompressAI currently provides:
 
 ![PSNR performances plot on Kodak](assets/kodak-psnr.png)
 
+## SOTA Techniques
+
+### Image Compression
+
+1. **ELIC (2022)** - State-of-the-art with:
+   - Uneven channel groups [16, 16, 32, 64, 192]
+   - Space-channel context (SCCTX)
+   - Non-local attention
+   - ResidualBottleneckBlock (1x1→3x3→1x1)
+2. **Cheng2020 with Checkerboard Context** - Combines GMM attention model with checkerboard 2-pass decoding for parallelism
+3. **JointAutoregressiveHierarchicalPriors (mbt2018)** - Best compression via combined hyperprior + autoregressive context
+
+### Variable Bitrate
+
+- **VBR models (2024)** with learnable gain parameters and quantization-reconstruction offsets
+
+### Video Compression
+
+- **ScaleSpaceFlow (ssf2020)** - Multi-scale Gaussian pyramid with optical flow + scale field prediction
+
+### Context Modeling Evolution (newest = most advanced)
+
+1. Factorized prior → 2. Hyperprior → 3. Autoregressive → 4. Checkerboard → 5. Channel groups → 6. SCCTX (ELIC)
 
 > **Note**: Multi-GPU support is now experimental.
 
